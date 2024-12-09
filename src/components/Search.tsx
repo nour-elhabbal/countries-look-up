@@ -1,35 +1,49 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Box, Input } from "@chakra-ui/react";
+import { useTypewriter } from "react-simple-typewriter";
 
-import { useDebounce } from "@/hooks/useDebounce";
+import { Input } from "@chakra-ui/react";
+import { IoSearch } from "react-icons/io5";
+import { InputGroup } from "./ui/input-group";
+
+import { useQueryParams, useDebounce } from "@/hooks";
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const { createQueryParams, getQueryParam, updateQueryParams } =
+    useQueryParams();
+
+  const [searchTerm, setSearchTerm] = useState(getQueryParam("query") ?? "");
+
   const debouncedTerm = useDebounce(searchTerm);
 
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+  const [placeholder] = useTypewriter({
+    words: ["name (ex: Egypt)", "top level domain (ex: .eg)"],
+    loop: 0,
+  });
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    debouncedTerm ? params.set("query", debouncedTerm) : params.delete("query");
-    replace(`${pathname}?${params.toString()}`);
+    updateQueryParams(createQueryParams("query", debouncedTerm));
   }, [debouncedTerm]);
 
   return (
-    <Box>
+    <InputGroup startElement={<IoSearch />} w="full">
       <Input
         name="query"
         onChange={(e) => {
           setSearchTerm(e.target.value);
         }}
-        defaultValue={searchParams.get("query")?.toString()}
+        defaultValue={getQueryParam("query") ?? ""}
+        placeholder={`Search for a country by ${placeholder}`}
+        bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
+        _selection={{ color: "purple.800" }}
+        variant="outline"
+        fontSize="md"
+        h="14"
+        w={["full", null, "50%"]}
+        minW={["unset", null, "lg"]}
       />
-    </Box>
+    </InputGroup>
   );
 };
 
