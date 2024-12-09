@@ -37,7 +37,7 @@ const CountriesList = () => {
         fontWeight="bold"
         fontSize="md"
       >
-        Error: {error?.message}
+        Error: {error?.status} | {error?.message}
       </Flex>
     );
 
