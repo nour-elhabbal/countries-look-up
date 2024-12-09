@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { Box, Button, Text } from "@chakra-ui/react";
 import {
   MenuContent,
@@ -9,7 +10,6 @@ import {
   MenuRoot,
   MenuTrigger,
 } from "@/components/ui/menu";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import { Continent } from "@/types";
 import { useQueryParams } from "@/hooks";
@@ -45,9 +45,9 @@ const FiltersMenu = () => {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           display="flex"
           justifyContent="space-between"
-          bgColor="dark.elements"
+          bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
           variant="plain"
-          w="52"
+          w={["full", "52"]}
           h="14"
         >
           <Text>{selectedContinent || "Filter by continent"}</Text>
@@ -56,11 +56,18 @@ const FiltersMenu = () => {
         </Button>
       </MenuTrigger>
 
-      <MenuContent bgColor="dark.elements" w="52">
+      <MenuContent
+        bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
+        w={["full", "52"]}
+      >
         {continents.map((continent, i) => {
           return (
             <MenuItem
-              bgColor={selectedContinent === continent ? "dark.bg" : "unset"}
+              bgColor={
+                selectedContinent === continent
+                  ? { _dark: "dark.bg", _light: "light.bg" }
+                  : "unset"
+              }
               value={continent.toLowerCase()}
               key={`menu item ${i}`}
               onClick={() => {
