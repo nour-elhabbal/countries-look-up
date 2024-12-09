@@ -22,6 +22,9 @@ const customConfig = defineConfig({
           input: { value: "hsl(0, 0%, 52%)" },
           text: { value: "hsl(200, 15%, 8%)" },
         },
+        neutral: {
+          skeleton: { value: "hsl(0, 0%, 52%)" },
+        },
       },
     },
   },
