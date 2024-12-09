@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import { Box, Flex } from "@chakra-ui/react";
 import { ColorModeButton } from "./ui/color-mode";
-import Link from "next/link";
 
 const Header = () => {
   return (
@@ -8,7 +9,7 @@ const Header = () => {
       as="header"
       justify="space-between"
       align="center"
-      px={["4", "14", "16"]}
+      px={["4", null, "16"]}
       py="5"
       _dark={{ bgColor: "dark.elements" }}
       _light={{ bgColor: "light.elements" }}
