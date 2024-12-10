@@ -44,7 +44,7 @@ const CountriesList = () => {
   if (isLoading) {
     return (
       <Flex flexWrap="wrap" justify="space-around" gap="5" mx={["unset", "8"]}>
-        {[...Array(8)].map((_, i) => (
+        {[...Array(16)].map((_, i) => (
           <CountryCardSkeleton key={`SKELETON ${i}`} />
         ))}
       </Flex>
@@ -52,8 +52,8 @@ const CountriesList = () => {
   }
 
   return (
-    <Flex direction="column" mx={["unset", "8"]}>
-      <Flex flexWrap="wrap" justify="space-around" gap="5" w="full">
+    <Flex direction="column" px="5">
+      <Flex flexWrap="wrap" justify="center" gap="15" w="full">
         {data?.pages.map((page) =>
           page?.countries?.map((country) => (
             <CountryCard key={country.iso2} country={country} />

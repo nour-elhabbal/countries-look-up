@@ -8,6 +8,7 @@ const CountryCardSkeleton = () => {
       h="21em"
       my="6"
       minW={["310px", null, "250px"]}
+      maxW="310px"
       bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
       borderRadius="md"
     >
