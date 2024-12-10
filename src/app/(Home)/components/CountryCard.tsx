@@ -6,10 +6,10 @@ import type { Country } from "@/types";
 const CountryCard = ({ country }: { country: Country }) => {
   return (
     <Box
-      w="20%"
+      w={["25%", null, "20%"]}
       h="21em"
       my="6"
-      minW={["280px", "250px"]}
+      minW={["310px", null, "250px"]}
       bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
       borderRadius="md"
     >
