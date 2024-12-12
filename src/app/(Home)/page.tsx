@@ -3,8 +3,45 @@ import { Box, Flex } from "@chakra-ui/react";
 import CountriesList from "./components/CountriesList";
 import FiltersMenu from "@/components/FiltersMenu";
 import Search from "../../components/Search";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { getCountriesList } from "@/utils";
+import { Continent } from "@/types";
 
-const Home = async () => {
+interface HomeProps {
+  searchParams: Promise<{
+    continent: Continent;
+    query: string;
+  }>;
+}
+
+const Home = async ({ searchParams }: HomeProps) => {
+  const { continent = "", query = "" } = await searchParams;
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: [
+      "countries",
+      continent,
+      query[query.length - 1] === "." ? "" : query,
+    ],
+
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) => {
+      return getCountriesList(
+        {
+          continent,
+          query,
+        },
+        pageParam
+      );
+    },
+  });
+
   return (
     <>
       <Box>
@@ -20,8 +57,9 @@ const Home = async () => {
 
           <FiltersMenu />
         </Flex>
-
-        <CountriesList />
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <CountriesList />
+        </HydrationBoundary>
       </Box>
     </>
   );
