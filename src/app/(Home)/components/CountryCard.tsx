@@ -21,8 +21,8 @@ const CountryCard = ({ country }: { country: Country }) => {
             src={country.href.flag}
             width={500}
             height={295}
-            objectFit="cover"
             alt="flag"
+            priority
             style={{ borderRadius: "inherit" }}
           />
         </Box>
