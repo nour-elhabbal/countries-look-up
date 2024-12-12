@@ -1,5 +1,10 @@
 export type QueryParamsType = "continent" | "query";
 
+export interface ApiError {
+  status: number;
+  message: string;
+}
+
 export type Continent =
   | "Asia"
   | "Africa"
@@ -7,7 +12,8 @@ export type Continent =
   | "Oceana"
   | "Australia"
   | "North America"
-  | "South America";
+  | "South America"
+  | "";
 
 export interface Country {
   name: string;
@@ -40,8 +46,57 @@ export interface CountriesListApiResponse {
     to: number;
     total: number;
   };
-  error?: {
-    status: number;
-    message: string;
+  error?: ApiError;
+}
+
+export interface CountryDetailsApiResponse {
+  name: {
+    common: string;
+
+    nativeName: {
+      [language: string]: { common: string };
+    };
   };
+
+  currencies: {
+    [currency: string]: { name: string };
+  };
+
+  languages: {
+    [language: string]: string;
+  };
+
+  region: string;
+
+  cca2: string;
+
+  population: number;
+
+  subregion: string;
+
+  capital: string[];
+
+  borders: string[];
+}
+
+export interface GetCountryDetailsReturnType {
+  borders: { name: string; cca2: string }[];
+
+  currencies: string[];
+
+  languages: string[];
+
+  capitals: string[];
+
+  nativeName: string;
+
+  name: string;
+
+  region: string;
+
+  cca2: string;
+
+  subregion: string;
+
+  population: number;
 }

@@ -8,6 +8,7 @@ import type { Continent, QueryParamsType } from "@/types";
 
 import CountryCard from "./CountryCard";
 import CountryCardSkeleton from "./CountryCardSkeleton";
+import { useEffect } from "react";
 
 const CountriesList = () => {
   const { ref, inView } = useInView();
@@ -23,10 +24,14 @@ const CountriesList = () => {
     data,
     isFetchingNextPage,
     error,
-    current_page,
-    last_page,
+    hasNextPage,
     isLoading,
-  } = useCountriesListInfiniteQuery(continent, query, inView);
+    fetchNextPage,
+  } = useCountriesListInfiniteQuery(continent, query);
+
+  useEffect(() => {
+    if (inView) fetchNextPage();
+  }, [inView]);
 
   if (error)
     return (
@@ -43,7 +48,7 @@ const CountriesList = () => {
 
   if (isLoading) {
     return (
-      <Flex flexWrap="wrap" justify="space-around" gap="5" mx={["unset", "8"]}>
+      <Flex flexWrap="wrap" justify="space-around" gap="5">
         {[...Array(16)].map((_, i) => (
           <CountryCardSkeleton key={`SKELETON ${i}`} />
         ))}
@@ -53,7 +58,7 @@ const CountriesList = () => {
 
   return (
     <Flex direction="column" px="5">
-      <Flex flexWrap="wrap" justify="center" gap="15" w="full">
+      <Flex flexWrap="wrap" justify="space-around" gap="12" w="full">
         {data?.pages.map((page) =>
           page?.countries?.map((country) => (
             <CountryCard key={country.iso2} country={country} />
@@ -74,7 +79,7 @@ const CountriesList = () => {
         </Flex>
       )}
 
-      {current_page === last_page || isFetchingNextPage || (
+      {!hasNextPage || isFetchingNextPage || (
         <Box ref={ref} h="2" w="10" mt="5" />
       )}
     </Flex>

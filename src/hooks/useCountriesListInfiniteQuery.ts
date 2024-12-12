@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 import type { Continent } from "@/types";
@@ -6,12 +5,17 @@ import { getCountriesList } from "@/utils";
 
 export const useCountriesListInfiniteQuery = (
   continent: Continent,
-  query: string,
-  inView: boolean
+  query: string
 ) => {
-  const { data, refetch, fetchNextPage, isFetchingNextPage, isLoading } =
+  const queryKey = [
+    "countries",
+    continent,
+    query[query.length - 1] === "." ? "" : query,
+  ];
+
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["countries", continent, query],
+      queryKey,
 
       queryFn: ({ pageParam }) => {
         return getCountriesList(
@@ -38,22 +42,13 @@ export const useCountriesListInfiniteQuery = (
       },
     });
 
-  useEffect(() => {
-    if (inView) fetchNextPage();
-  }, [inView]);
-
-  useEffect(() => {
-    if (query[query.length - 1] === ".") return;
-
-    refetch();
-  }, [continent, query, refetch]);
-
   return {
     error: data?.pages[data.pages.length - 1]?.error,
-    current_page: data?.pages[data.pages.length - 1]?.meta?.current_page,
-    last_page: data?.pages[data.pages.length - 1]?.meta?.last_page,
     data,
     isLoading,
     isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    queryKey,
   };
 };
