@@ -10,13 +10,13 @@ export const getCountryDetails = async (
 ): Promise<GetCountryDetailsReturnType | undefined> => {
   try {
     const res: CountryDetailsApiResponse[] = await fetch(
-      `https://restcountries.com/v3.1/alpha/${domain}`,
+      `https://restcountries.com/v3.1/alpha?codes=${domain}`,
       {
         next: { revalidate: 604800 },
       }
     ).then((res) => res.json());
 
-    let {
+    const {
       borders,
       capital,
       cca2,
@@ -28,12 +28,11 @@ export const getCountryDetails = async (
       subregion,
     } = res[0];
 
-    const borderCountries: CountryDetailsApiResponse[] = await fetch(
-      `https://restcountries.com/v3.1/alpha?codes=${borders}`,
-      {
+    const borderCountries: CountryDetailsApiResponse[] =
+      borders &&
+      (await fetch(`https://restcountries.com/v3.1/alpha?codes=${borders}`, {
         next: { revalidate: 604800 },
-      }
-    ).then((res) => res.json());
+      }).then((res) => res.json()));
 
     return {
       currencies: Object.keys(currencies).map((key) => currencies[key].name),
@@ -44,10 +43,12 @@ export const getCountryDetails = async (
 
       name: name.common,
 
-      borders: borderCountries.map((country) => ({
-        cca2: country.cca2,
-        name: country.name.common,
-      })),
+      borders:
+        borders &&
+        borderCountries.map((country) => ({
+          cca2: country.cca2,
+          name: country.name.common,
+        })),
 
       capitals: capital,
       population,

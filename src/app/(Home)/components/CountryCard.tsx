@@ -15,7 +15,7 @@ const CountryCard = ({ country }: { country: Country }) => {
       bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
       borderRadius="md"
     >
-      <Link href={`/${country.iso2}`}>
+      <Link href={`/${country.iso2.toLowerCase()}`}>
         <Box h="50%" w="100%" mb="5" borderRadius="md">
           <Image
             src={country.href.flag}

@@ -80,7 +80,7 @@ export interface CountryDetailsApiResponse {
 }
 
 export interface GetCountryDetailsReturnType {
-  borders: { name: string; cca2: string }[];
+  borders: { name: string; cca2: string }[] | undefined;
 
   currencies: string[];
 
