@@ -30,7 +30,7 @@ export interface Country {
 }
 
 export interface CountriesListApiResponse {
-  countries: Country[];
+  data: Country[];
   links?: {
     first: string;
     last: string;
@@ -99,4 +99,9 @@ export interface GetCountryDetailsReturnType {
   subregion: string;
 
   population: number;
+}
+
+export interface QueryParams {
+  continent: Continent;
+  query: string;
 }
