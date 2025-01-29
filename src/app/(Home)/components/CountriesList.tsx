@@ -3,7 +3,7 @@
 import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { useInView } from "react-intersection-observer";
 
-import { useCountriesListInfiniteQuery, useQueryParams } from "@/hooks";
+import { useCountriesInfiniteQuery, useQueryParams } from "@/hooks";
 import type { Continent, QueryParamsType } from "@/types";
 
 import CountryCard from "./CountryCard";
@@ -14,26 +14,21 @@ const CountriesList = () => {
   const { ref, inView } = useInView();
 
   const { getQueryParam } = useQueryParams();
-
   const query = getQueryParam<QueryParamsType>("query") ?? "";
-
   const continent = (getQueryParam<QueryParamsType>("continent") ??
     "") as Continent;
 
-  const {
-    data,
-    isFetchingNextPage,
-    error,
-    hasNextPage,
-    isLoading,
-    fetchNextPage,
-  } = useCountriesListInfiniteQuery(continent, query);
+  const countriesInfiniteQuery = useCountriesInfiniteQuery(continent, query);
+
+  const shouldFetchNextPage =
+    countriesInfiniteQuery.hasNextPage &&
+    !countriesInfiniteQuery.isFetchingNextPage;
 
   useEffect(() => {
-    if (inView) fetchNextPage();
+    if (inView) countriesInfiniteQuery.fetchNextPage();
   }, [inView]);
 
-  if (error)
+  if (countriesInfiniteQuery.error)
     return (
       <Flex
         w="full"
@@ -42,11 +37,11 @@ const CountriesList = () => {
         fontWeight="bold"
         fontSize="md"
       >
-        Error: {error?.status} | {error?.message}
+        Error: {countriesInfiniteQuery.error?.message}
       </Flex>
     );
 
-  if (isLoading) {
+  if (countriesInfiniteQuery.isPending) {
     return (
       <Flex flexWrap="wrap" justify="space-around" gap="5">
         {[...Array(16)].map((_, i) => (
@@ -59,14 +54,14 @@ const CountriesList = () => {
   return (
     <Flex direction="column" px="5">
       <Flex flexWrap="wrap" justify="space-around" gap="12" w="full">
-        {data?.pages.map((page) =>
-          page?.countries?.map((country) => (
+        {countriesInfiniteQuery.data.pages.map((page) =>
+          page.data?.map((country) => (
             <CountryCard key={country.iso2} country={country} />
           ))
         )}
       </Flex>
 
-      {isFetchingNextPage && (
+      {countriesInfiniteQuery.isFetchingNextPage && (
         <Flex
           w="full"
           justify="center"
@@ -79,9 +74,7 @@ const CountriesList = () => {
         </Flex>
       )}
 
-      {!hasNextPage || isFetchingNextPage || (
-        <Box ref={ref} h="2" w="10" mt="5" />
-      )}
+      {shouldFetchNextPage && <Box ref={ref} h="2" w="10" mt="5" />}
     </Flex>
   );
 };

@@ -8,14 +8,11 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { getCountriesList } from "@/utils";
 import { Continent } from "@/types";
+import { useCountriesInfiniteQuery } from "@/hooks";
 
 interface HomeProps {
-  searchParams: Promise<{
-    continent: Continent;
-    query: string;
-  }>;
+  searchParams: Promise<{ continent: Continent; query: string }>;
 }
 
 const Home = async ({ searchParams }: HomeProps) => {
@@ -23,23 +20,9 @@ const Home = async ({ searchParams }: HomeProps) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery({
-    queryKey: [
-      "countries",
-      continent,
-      query[query.length - 1] === "." ? "" : query,
-    ],
-
+    queryKey: useCountriesInfiniteQuery.queryKey({ continent, query }),
+    queryFn: useCountriesInfiniteQuery.queryFn,
     initialPageParam: 1,
-
-    queryFn: ({ pageParam }) => {
-      return getCountriesList(
-        {
-          continent,
-          query,
-        },
-        pageParam
-      );
-    },
   });
 
   return (
