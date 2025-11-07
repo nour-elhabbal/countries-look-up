@@ -1,54 +1,60 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
-import Image from "next/image";
+'use client';
+import { Box, Heading, Text } from '@chakra-ui/react';
+import Image from 'next/image';
 
-import type { Country } from "@/types";
-import Link from "next/link";
+import type { Country } from '@/types';
+import Link from 'next/link';
 
 const CountryCard = ({ country }: { country: Country }) => {
   return (
     <Box
-      w={["25%", null, "20%"]}
-      h="21em"
-      my="6"
-      minW={["310px", null, "250px"]}
-      maxWidth="310px"
-      bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
-      borderRadius="md"
+      w={['25%', null, '20%']}
+      h='24em'
+      my='6'
+      minW={['310px', null, '250px']}
+      maxWidth='310px'
+      bgColor={{ _dark: 'dark.elements', _light: 'light.elements' }}
+      borderRadius='md'
     >
-      <Link href={`/${country.iso2.toLowerCase()}`}>
-        <Box h="50%" w="100%" mb="5" borderRadius="md">
+      <Link href={`/${country.alpha2Code.toLowerCase()}`} prefetch>
+        <Box position='relative' h='12em' w='100%' mb='5' borderRadius='md'>
           <Image
-            src={country.href.flag}
+            src={country.flag}
             width={500}
-            height={295}
-            alt="flag"
+            height={200}
+            alt={`Flag of ${country.name}`}
             priority
-            style={{ borderRadius: "inherit" }}
+            style={{
+              objectFit: 'cover',
+              borderTopLeftRadius: 'inherit',
+              borderTopRightRadius: 'inherit',
+              height: 'inherit',
+            }}
           />
         </Box>
 
-        <Heading fontSize="lg" mx="4" mb="3">
+        <Heading fontSize='xl' mx='4' mb='3'>
           {country.name}
         </Heading>
 
-        <Box mx="4" fontSize="sm">
+        <Box mx='4' fontSize='md'>
           <Text>
-            Population:{" "}
-            <Box as="span" fontWeight="thin" opacity=".8">
+            Population:{' '}
+            <Box as='span' fontWeight='thin' opacity='.8'>
               {country.population}
             </Box>
           </Text>
 
           <Text>
-            Continent:{" "}
-            <Box as="span" fontWeight="thin" opacity=".8">
-              {country.continent}
+            Continent:{' '}
+            <Box as='span' fontWeight='thin' opacity='.8'>
+              {country.region}
             </Box>
           </Text>
 
           <Text>
-            Capital:{" "}
-            <Box as="span" fontWeight="thin" opacity=".8">
+            Capital:{' '}
+            <Box as='span' fontWeight='thin' opacity='.8'>
               {country.capital}
             </Box>
           </Text>

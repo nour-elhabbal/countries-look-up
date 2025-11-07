@@ -1,28 +1,28 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Box, Flex } from "@chakra-ui/react";
-import { ColorModeButton } from "./ui/color-mode";
+import { Box, Flex } from '@chakra-ui/react';
+import { ColorModeButton } from './ui/color-mode';
 
 const Header = () => {
   return (
     <Flex
-      as="header"
-      justify="space-between"
-      align="center"
-      px={["4", null, "16"]}
-      py="5"
-      _dark={{ bgColor: "dark.elements" }}
-      _light={{ bgColor: "light.elements" }}
+      as='header'
+      justify='space-between'
+      align='center'
+      px={['4', null, '16']}
+      py='5'
+      bgColor={{ _dark: 'dark.elements', _light: 'light.elements' }}
+      mb='8'
     >
-      <Box fontWeight="800" fontSize={["md", "2xl", "3xl"]}>
-        <Link href="/">Where in the world?</Link>
+      <Box fontWeight='800' fontSize={['md', '2xl', '3xl']}>
+        <Link href='/'>Where in the world?</Link>
       </Box>
 
       <Box>
         <ColorModeButton
-          size={["md", "lg"]}
-          fontWeight="700"
-          _hover={{ cursor: "pointer", bgColor: "unset" }}
+          size={['md', 'lg']}
+          fontWeight='700'
+          _hover={{ cursor: 'pointer', bgColor: 'unset' }}
           _dark={{ _after: { content: '"Dark mode"' } }}
           _light={{ _after: { content: '"Light mode"' } }}
         />

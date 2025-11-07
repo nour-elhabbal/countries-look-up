@@ -1,33 +1,25 @@
-export type QueryParamsType = "continent" | "query";
+export type QueryParamsType = 'region' | 'query';
 
 export interface ApiError {
   status: number;
   message: string;
 }
 
-export type Continent =
-  | "Asia"
-  | "Africa"
-  | "Europe"
-  | "Oceana"
-  | "Australia"
-  | "North America"
-  | "South America"
-  | "";
+export type Region = 'Africa' | 'Americas' | 'Asia' | 'Europe' | 'Oceania' | 'Polar' | 'Antarctic' | '';
 
-export interface Country {
-  name: string;
-  full_name: string;
-  capital: string;
-  population: string;
-  continent: string;
-  iso2: string;
-  currency: string;
-  href: {
-    flag: string;
-    self: string;
-  };
-}
+// export interface Country {
+//   name: string;
+//   full_name: string;
+//   capital: string;
+//   population: string;
+//   continent: string;
+//   iso2: string;
+//   currency: string;
+//   href: {
+//     flag: string;
+//     self: string;
+//   };
+// }
 
 export interface CountriesListApiResponse {
   data: Country[];
@@ -102,6 +94,51 @@ export interface GetCountryDetailsReturnType {
 }
 
 export interface QueryParams {
-  continent: Continent;
+  region: Region;
   query: string;
+}
+
+export interface Country {
+  name: string;
+  topLevelDomain: string[];
+  alpha2Code: string;
+  alpha3Code: string;
+  callingCodes: string[];
+  capital: string;
+  altSpellings: string[];
+  subregion: string;
+  region: string;
+  population: number;
+  latlng: number[];
+  demonym: string;
+  area: number;
+  timezones: string[];
+  borders: string[];
+  nativeName: string;
+  numericCode: string;
+  flags: {
+    svg: string;
+    png: string;
+  };
+  currencies: {
+    code: string;
+    name: string;
+    symbol: string;
+  }[];
+  languages: {
+    iso639_1: string;
+    iso639_2: string;
+    name: string;
+    nativeName: string;
+  }[];
+  translations: {
+    [key: string]: string;
+  };
+  flag: string;
+  regionalBlocs: {
+    acronym: string;
+    name: string;
+  }[];
+  cioc: string;
+  independent: boolean;
 }

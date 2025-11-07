@@ -1,64 +1,16 @@
-import {
-  GetCountryDetailsReturnType,
-  CountryDetailsApiResponse,
-} from "@/types";
+import { Country } from '@/types';
 
-// KOSOM DA API EBN ZANYA
-
-export const getCountryDetails = async (
-  domain: string
-): Promise<GetCountryDetailsReturnType | undefined> => {
+export const getCountryDetails = async (domain: string): Promise<Country | undefined> => {
   try {
-    const res: CountryDetailsApiResponse[] = await fetch(
-      `https://restcountries.com/v3.1/alpha?codes=${domain}`,
-      {
-        next: { revalidate: 604800 },
-      }
-    ).then((res) => res.json());
+    console.log(`https://www.apicountries.com/alpha/${domain}`);
+    const res: Country = await fetch(`https://www.apicountries.com/alpha/${domain}`, {
+      headers: { Accept: 'application/json' },
+      next: { revalidate: 86400 },
+    }).then(res => res.json());
 
-    const {
-      borders,
-      capital,
-      cca2,
-      currencies,
-      languages,
-      name,
-      population,
-      region,
-      subregion,
-    } = res[0];
-
-    const borderCountries: CountryDetailsApiResponse[] =
-      borders &&
-      (await fetch(`https://restcountries.com/v3.1/alpha?codes=${borders}`, {
-        next: { revalidate: 604800 },
-      }).then((res) => res.json()));
-
-    return {
-      currencies: Object.keys(currencies).map((key) => currencies[key].name),
-
-      languages: Object.keys(languages).map((key) => languages[key]),
-
-      nativeName: name.nativeName[Object.keys(languages)[0]].common,
-
-      name: name.common,
-
-      borders:
-        borders &&
-        borderCountries.map((country) => ({
-          cca2: country.cca2,
-          name: country.name.common,
-        })),
-
-      capitals: capital,
-      population,
-      subregion,
-      region,
-      cca2,
-    };
+    return res;
   } catch (err) {
-    console.log(err);
-
+    console.log('Error fetching country details:', err);
     return undefined;
   }
 };

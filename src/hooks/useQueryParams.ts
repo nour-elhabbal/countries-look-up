@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 
 export const useQueryParams = () => {
   const searchParams = useSearchParams();
@@ -16,14 +16,14 @@ export const useQueryParams = () => {
       } else {
         params.delete(name);
       }
-
-      return `?${params.toString()}`;
+      const queryString = params.toString();
+      return queryString ? `?${params.toString()}` : '';
     },
     [searchParams]
   );
 
   const updateQueryParams = (param: string) => {
-    window.history.replaceState(null, "", `${pathname}${param}`);
+    window.history.replaceState(null, '', `${pathname}${param}`);
   };
 
   return {

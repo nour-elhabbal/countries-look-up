@@ -1,49 +1,40 @@
-"use client";
+'use client';
 
-import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
-import { useInView } from "react-intersection-observer";
+import { Box, Flex, Spinner, Text } from '@chakra-ui/react';
+import { useInView } from 'react-intersection-observer';
 
-import { useCountriesInfiniteQuery, useQueryParams } from "@/hooks";
-import type { Continent, QueryParamsType } from "@/types";
+import { useCountriesInfiniteQuery, useQueryParams } from '@/hooks';
+import type { QueryParamsType, Region } from '@/types';
 
-import CountryCard from "./CountryCard";
-import CountryCardSkeleton from "./CountryCardSkeleton";
-import { useEffect } from "react";
+import CountryCard from './CountryCard';
+import CountryCardSkeleton from './CountryCardSkeleton';
+import React, { useEffect } from 'react';
 
 const CountriesList = () => {
   const { ref, inView } = useInView();
 
   const { getQueryParam } = useQueryParams();
-  const query = getQueryParam<QueryParamsType>("query") ?? "";
-  const continent = (getQueryParam<QueryParamsType>("continent") ??
-    "") as Continent;
+  const query = getQueryParam<QueryParamsType>('query') ?? '';
+  const region = (getQueryParam<QueryParamsType>('region') ?? '') as Region;
 
-  const countriesInfiniteQuery = useCountriesInfiniteQuery(continent, query);
+  const countriesInfiniteQuery = useCountriesInfiniteQuery({ region, query });
 
-  const shouldFetchNextPage =
-    countriesInfiniteQuery.hasNextPage &&
-    !countriesInfiniteQuery.isFetchingNextPage;
+  const shouldFetchNextPage = countriesInfiniteQuery.hasNextPage && !countriesInfiniteQuery.isFetchingNextPage;
 
   useEffect(() => {
     if (inView) countriesInfiniteQuery.fetchNextPage();
-  }, [inView]);
+  }, [inView, countriesInfiniteQuery]);
 
   if (countriesInfiniteQuery.error)
     return (
-      <Flex
-        w="full"
-        justify="center"
-        color="red.500"
-        fontWeight="bold"
-        fontSize="md"
-      >
+      <Flex w='full' justify='center' color='red.500' fontWeight='bold' fontSize='md'>
         Error: {countriesInfiniteQuery.error?.message}
       </Flex>
     );
 
-  if (countriesInfiniteQuery.isPending) {
+  if (countriesInfiniteQuery.isPending && !countriesInfiniteQuery.data) {
     return (
-      <Flex flexWrap="wrap" justify="space-around" gap="5">
+      <Flex flexWrap='wrap' justify='space-around' gap='5'>
         {[...Array(16)].map((_, i) => (
           <CountryCardSkeleton key={`SKELETON ${i}`} />
         ))}
@@ -52,29 +43,24 @@ const CountriesList = () => {
   }
 
   return (
-    <Flex direction="column" px="5">
-      <Flex flexWrap="wrap" justify="space-around" gap="12" w="full">
-        {countriesInfiniteQuery.data.pages.map((page) =>
-          page.data?.map((country) => (
-            <CountryCard key={country.iso2} country={country} />
-          ))
-        )}
+    <Flex direction='column' px='5'>
+      <Flex flexWrap='wrap' justify='space-around' gap='12' w='full'>
+        {countriesInfiniteQuery.data?.pages?.map(page => (
+          <React.Fragment key={Math.random()}>
+            {Array.isArray(page.paginatedData) &&
+              page.paginatedData.map(country => <CountryCard key={country.alpha2Code} country={country} />)}
+          </React.Fragment>
+        ))}
       </Flex>
 
       {countriesInfiniteQuery.isFetchingNextPage && (
-        <Flex
-          w="full"
-          justify="center"
-          align="center"
-          h="20"
-          direction="column"
-        >
-          <Spinner size="xl" color="purple.400" />
+        <Flex w='full' justify='center' align='center' h='20' direction='column'>
+          <Spinner size='xl' color='purple.400' />
           <Text>Loading</Text>
         </Flex>
       )}
 
-      {shouldFetchNextPage && <Box ref={ref} h="2" w="10" mt="5" />}
+      {shouldFetchNextPage && <Box ref={ref} h='2' w='10' mt='5' />}
     </Flex>
   );
 };

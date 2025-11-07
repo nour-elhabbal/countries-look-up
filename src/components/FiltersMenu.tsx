@@ -1,79 +1,56 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { Box, Button, Text } from "@chakra-ui/react";
-import {
-  MenuContent,
-  MenuItem,
-  MenuRoot,
-  MenuTrigger,
-} from "@/components/ui/menu";
+import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { Box, Button, Text } from '@chakra-ui/react';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '@/components/ui/menu';
 
-import { Continent } from "@/types";
-import { useQueryParams } from "@/hooks";
+import { Region } from '@/types';
+import { useQueryParams } from '@/hooks';
 
 const FiltersMenu = () => {
-  const { createQueryParams, updateQueryParams, getQueryParam } =
-    useQueryParams();
+  const { createQueryParams, updateQueryParams, getQueryParam } = useQueryParams();
 
-  const [selectedContinent, setSelectedContinent] = useState(
-    getQueryParam("continent") ?? ""
-  );
+  const [selectedRegion, setSelectedRegion] = useState(getQueryParam('region') ?? '');
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const continents: Continent[] = [
-    "North America",
-    "South America",
-    "Australia",
-    "Oceana",
-    "Africa",
-    "Europe",
-    "Asia",
-  ];
+  const regions: Region[] = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania', 'Polar', 'Antarctic'];
 
   useEffect(() => {
-    updateQueryParams(createQueryParams("continent", selectedContinent));
-  }, [selectedContinent]);
+    updateQueryParams(createQueryParams('region', selectedRegion));
+  }, [selectedRegion]);
 
   return (
     <MenuRoot>
       <MenuTrigger asChild>
         <Button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          display="flex"
-          justifyContent="space-between"
-          bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
-          variant="plain"
-          w={["full", "52"]}
-          h="14"
+          display='flex'
+          justifyContent='space-between'
+          bgColor={{ _dark: 'dark.elements', _light: 'light.elements' }}
+          variant='plain'
+          w={['full', '52']}
+          h='14'
         >
-          <Text>{selectedContinent || "Filter by continent"}</Text>
+          <Text>{selectedRegion || 'Filter by continent'}</Text>
 
           <Box>{isMenuOpen ? <IoIosArrowDown /> : <IoIosArrowUp />}</Box>
         </Button>
       </MenuTrigger>
 
-      <MenuContent
-        bgColor={{ _dark: "dark.elements", _light: "light.elements" }}
-        w={["full", "52"]}
-      >
-        {continents.map((continent, i) => {
+      <MenuContent bgColor={{ _dark: 'dark.elements', _light: 'light.elements' }} w={['full', '52']}>
+        {regions.map((continent, i) => {
           return (
             <MenuItem
-              bgColor={
-                selectedContinent === continent
-                  ? { _dark: "dark.bg", _light: "light.bg" }
-                  : "unset"
-              }
+              bgColor={selectedRegion === continent ? { _dark: 'dark.bg', _light: 'light.bg' } : 'unset'}
+              cursor='pointer'
+              _hover={{ bgColor: { _dark: 'dark.bg', _light: 'light.bg' } }}
               value={continent.toLowerCase()}
               key={`menu item ${i}`}
               onClick={() => {
-                setSelectedContinent((prev) =>
-                  prev === continent ? "" : continent
-                );
+                setSelectedRegion(prev => (prev === continent ? '' : continent));
               }}
             >
               {continent}

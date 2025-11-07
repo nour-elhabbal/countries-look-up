@@ -1,0 +1,25 @@
+//Fix: the back button sometimes misses
+// fix: delay before directing to details page
+
+// Tweak the filters menu. (med)
+
+// Use react query in details page
+
+
+// Check for everything (last touches)
+// delete all dead code and files (last touches)
+// Add Pretty readme and github description for it (last touches)
+
+5/11/2025
+// Finish the border countries
+// Test in build before commiting
+// Finish every thing and commit them 
+
+6/11/2025
+// Fix The layout shifts because of the hydration error
+// Test Everything on build
+// Push the Changes
+// Fix No Border Countries read as undef
+
+
+=> later on fix the border countries name not showing
